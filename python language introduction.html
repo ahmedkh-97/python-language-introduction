@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل بايثون التفاعلي | المهندس أحمد خالد</title>
+    <!-- Google Fonts: Cairo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            navy: '#0F172A',     /* كحلي داكن جداً */
+                            blue: '#1E293B',     /* كحلي متوسط */
+                            accent: '#F97316',   /* برتقالي هادئ */
+                            teal: '#0D9488',     /* بترولي هادئ */
+                            soft: '#F8FAFC'      /* رمادي فاتح جداً */
+                        }
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            scroll-behavior: smooth;
+        }
+        /* تصميم مخصص لشريط التمرير */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        /* تنسيقات الطباعة الاحترافية A4 */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 1.5cm;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+                font-size: 11pt;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-page-break {
+                page-break-before: always;
+            }
+            .print-card {
+                border: 1px solid #e2e8f0 !important;
+                box-shadow: none !important;
+                background: white !important;
+                page-break-inside: avoid;
+            }
+            .gradient-text {
+                background: none !important;
+                -webkit-text-fill-color: black !important;
+                color: black !important;
+            }
+        }
+
+        /* حركات مخصصة ممتعة للعين */
+        .hover-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .hover-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px -10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* كود توهج شعار بايثون */
+        @keyframes pulse-glow {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(249, 115, 22, 0.3)); }
+            50% { filter: drop-shadow(0 0 15px rgba(249, 115, 22, 0.6)); }
+        }
+        .python-logo-glow {
+            animation: pulse-glow 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-brand-soft text-slate-800 min-h-screen flex flex-col">
+
+    <!-- الترويسة العلوية المصغرة (Navbar) -->
+    <header class="bg-brand-navy text-white shadow-md sticky top-0 z-50 no-print transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <i class="fa-brands fa-python text-brand-accent text-2xl animate-spin-slow"></i>
+                <span class="font-extrabold text-lg tracking-wide bg-gradient-to-l from-white to-slate-300 bg-clip-text text-transparent">دليل بايثون التفاعلي</span>
+            </div>
+            <!-- روابط سريعة للتنقل -->
+            <nav class="hidden md:flex items-center gap-6 text-sm font-semibold">
+                <a href="#hero" class="hover:text-brand-accent transition-colors duration-200">الرئيسية</a>
+                <a href="#dashboard" class="hover:text-brand-accent transition-colors duration-200">لوحة الإحصاءات</a>
+                <a href="#interactive-guide" class="hover:text-brand-accent transition-colors duration-200">الدليل التفاعلي</a>
+                <a href="#best-practices" class="hover:text-brand-accent transition-colors duration-200">كتابة الأكواد</a>
+                <a href="#common-errors" class="hover:text-brand-accent transition-colors duration-200">الأخطاء الشائعة</a>
+            </nav>
+            <div class="flex items-center gap-3">
+                <button onclick="window.print()" class="bg-slate-800 hover:bg-brand-accent hover:text-brand-navy text-white text-xs md:text-sm font-bold px-4 py-2 rounded-lg border border-slate-700 hover:border-brand-accent transition-all duration-300 flex items-center gap-2">
+                    <i class="fa-solid fa-print"></i>
+                    <span>حفظ كـ PDF / طباعة</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section id="hero" class="relative bg-gradient-to-br from-brand-navy via-slate-900 to-slate-800 text-white overflow-hidden py-16 px-4 sm:px-6 lg:px-8">
+        <!-- طبقة مائية زخرفية في الخلفية -->
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#f97316_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        
+        <div class="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <!-- النصوص التعريفية للغطاء -->
+            <div class="lg:col-span-7 space-y-6 text-center lg:text-right">
+                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700 text-brand-accent text-xs md:text-sm font-semibold tracking-wider">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                    إصدار تفاعلي مميز ومجاني بالكامل
+                </span>
+                <h1 class="text-3xl md:text-5xl font-black leading-tight">
+                    مقدمة لغة <span class="bg-gradient-to-r from-brand-accent via-amber-400 to-yellow-500 bg-clip-text text-transparent gradient-text">بايثون</span> وقوتها في تحليل البيانات والذكاء الاصطناعي
+                </h1>
+                <p class="text-slate-300 text-base md:text-lg max-w-2xl leading-relaxed">
+                    من الصفر إلى الاحتراف المتقدم. كود نظيف، ممارسات برمجية فضلى، وتفاصيل دقيقة في تحليل البيانات وهيكلة نماذج الذكاء الاصطناعي لتغيير طريقة تفكيرك البرمجي.
+                </p>
+
+                <!-- كارد صاحب الدليل Ahmed Khaled -->
+                <div class="bg-slate-800/50 backdrop-blur-md p-4 rounded-2xl border border-slate-700 max-w-md inline-flex items-center gap-4 text-right hover:border-brand-accent/50 transition-all duration-300 print-card">
+                    <div class="w-16 h-16 rounded-full bg-brand-accent/20 flex items-center justify-center text-brand-accent text-2xl font-bold border border-brand-accent/30 shadow-inner">
+                        AK
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg text-white">المهندس أحمد خالد</h3>
+                        <p class="text-xs text-slate-400 mb-2">أخصائي تحليل البيانات ومطور الذكاء الاصطناعي</p>
+                        <a href="https://www.linkedin.com/in/ahmed-khalid97/" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-brand-accent hover:text-amber-400 font-semibold transition-colors duration-200 no-print">
+                            <i class="fa-brands fa-linkedin text-sm"></i>
+                            <span>تواصل عبر لينكد إن</span>
+                            <i class="fa-solid fa-arrow-left text-[10px] transform rotate-45 mr-1"></i>
+                        </a>
+                        <span class="hidden print:inline text-xs text-slate-400">linkedin.com/in/ahmed-khalid97</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- لوحة برمجية بصرية تفاعلية مع شعار بايثون مرسوم بالكامل باستخدام SVG -->
+            <div class="lg:col-span-5 flex justify-center items-center">
+                <div class="relative w-full max-w-sm aspect-square bg-slate-800/30 rounded-3xl p-6 border border-slate-700/80 backdrop-blur-sm shadow-2xl flex flex-col justify-between hover:border-slate-600 transition-all duration-500">
+                    <div class="flex items-center justify-between border-b border-slate-700/50 pb-4 mb-4">
+                        <div class="flex gap-1.5">
+                            <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                        </div>
+                        <span class="text-xs text-slate-400 font-mono">ahmed_khaled.py</span>
+                    </div>
+                    
+                    <!-- رسمة Python SVG تفاعلية مدمجة -->
+                    <div class="flex-1 flex items-center justify-center py-6 python-logo-glow">
+                        <svg class="w-40 h-40" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- القوس العلوي الأزرق (تحديث للـ Navy/Blue) -->
+                            <path d="M52.25 2C34.02 2 35.32 9.87 35.32 9.87L35.39 18H52.75C62.33 18 64 20.35 64 27.67V38.5H74.3C74.3 38.5 82 39.46 82 25.43C82 11.4 70.48 2 52.25 2Z" fill="#38BDF8"/>
+                            <!-- القوس السفلي الأصفر (تحديث للـ Accent) -->
+                            <path d="M57.75 108C75.98 108 74.68 100.13 74.68 100.13L74.61 92H57.25C47.67 92 46 89.65 46 82.33V71.5H35.7C35.7 71.5 28 70.54 28 84.57C28 98.6 39.52 108 57.75 108Z" fill="#F97316"/>
+                            <!-- نقطة العين العلوية -->
+                            <circle cx="44.5" cy="10" r="1.5" fill="#0F172A"/>
+                            <!-- نقطة العين السفلية -->
+                            <circle cx="65.5" cy="100" r="1.5" fill="#0F172A"/>
+                        </svg>
+                    </div>
+
+                    <div class="border-t border-slate-700/50 pt-4 mt-4 font-mono text-[10px] md:text-xs text-emerald-400">
+                        <p class="animate-pulse">&gt;&gt;&gt; import pandas as pd</p>
+                        <p>&gt;&gt;&gt; print("Hello AI & Data Science World!")</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 space-y-12">
+        
+        <section id="dashboard" class="space-y-6 print-page-break">
+            <div class="text-center lg:text-right">
+                <h2 class="text-2xl md:text-3xl font-extrabold text-brand-navy flex items-center gap-3 justify-center lg:justify-start">
+                    <span class="w-8 h-8 rounded-lg bg-brand-accent/10 text-brand-accent flex items-center justify-center"><i class="fa-solid fa-chart-line"></i></span>
+                    لوحة الإحصاءات والأرقام: قوة بايثون في لغة العصر
+                </h2>
+                <p class="text-slate-500 text-sm md:text-base mt-2">لماذا أصبحت لغة بايثون الاختيار رقم #1 بلا منازع في عالم البيانات والذكاء الاصطناعي؟</p>
+            </div>
+
+            <!-- الكروت الإحصائية الثلاثية -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- كارت 1 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover-card flex items-center justify-between print-card">
+                    <div class="space-y-2">
+                        <p class="text-slate-400 text-xs font-semibold">حصة سوق البرمجيات في الذكاء الاصطناعي</p>
+                        <h3 class="text-3xl font-black text-brand-navy">%87+</h3>
+                        <span class="text-emerald-500 text-xs font-bold"><i class="fa-solid fa-arrow-up-long"></i> نمو قياسي متسارع سنوي</span>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-amber-50 text-brand-accent flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                </div>
+                <!-- كارت 2 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover-card flex items-center justify-between print-card">
+                    <div class="space-y-2">
+                        <p class="text-slate-400 text-xs font-semibold">توفير الوقت والإنتاجية للمهندسين</p>
+                        <h3 class="text-3xl font-black text-brand-navy">5 أضعاف</h3>
+                        <span class="text-emerald-500 text-xs font-bold"><i class="fa-solid fa-arrow-up-long"></i> بالمقارنة مع السي بلس بلس</span>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-teal-50 text-brand-teal flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                </div>
+                <!-- كارت 3 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover-card flex items-center justify-between print-card">
+                    <div class="space-y-2">
+                        <p class="text-slate-400 text-xs font-semibold">الوظائف والطلب العالمي في السوق</p>
+                        <h3 class="text-3xl font-black text-brand-navy">المرتبة الأولى</h3>
+                        <span class="text-brand-accent text-xs font-bold"><i class="fa-solid fa-star"></i> الأكثر طلباً في الوظائف التقنية</span>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-briefcase"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- قسم الرسم البياني التفاعلي عبر Canvas مخصص برمجياً -->
+            <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center print-card">
+                <div class="lg:col-span-5 space-y-4">
+                    <h3 class="text-xl font-bold text-brand-navy">مؤشر شعبية بايثون والنمو السنوي</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">
+                        يمثل هذا المخطط البياني (المرسوم تفاعلياً وبأكواد فرونت إند خفيفة) قفزات بايثون الهائلة مقارنة باللغات الأخرى في السنين الأخيرة نظراً لظهور مكتبات Pandas، NumPy، و TensorFlow و PyTorch التي جعلتها ركيزة الذكاء الاصطناعي الأساسية.
+                    </p>
+                    <div class="p-4 bg-slate-50 rounded-xl space-y-2 border border-slate-100 text-xs">
+                        <div class="flex items-center justify-between">
+                            <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-brand-accent"></span> بايثون (تحليل وبيانات)</span>
+                            <span class="font-bold">مستمر بالصعود 📈</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span> اللغات الأخرى مجتمعة</span>
+                            <span class="font-bold text-slate-400">مستقر</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lg:col-span-7 flex flex-col items-center">
+                    <!-- لوحة الكانفاس للرسم التوضيحي -->
+                    <div class="w-full relative bg-slate-900 rounded-2xl p-4 shadow-inner overflow-hidden border border-slate-800">
+                        <div class="absolute top-2 right-2 flex items-center gap-1">
+                            <span class="w-2 h-2 rounded-full bg-red-400 animate-pulse"></span>
+                            <span class="text-[10px] text-slate-400 font-mono">تحديث حي ومباشر</span>
+                        </div>
+                        <canvas id="growthChart" class="w-full h-64 md:h-80 block"></canvas>
+                    </div>
+                    <span class="text-slate-400 text-[10px] mt-2 italic">* اضغط على الشاشة لإعادة تفعيل وتحريك المخطط التفاعلي</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="interactive-guide" class="space-y-6 print-page-break">
+            <div class="text-center lg:text-right">
+                <h2 class="text-2xl md:text-3xl font-extrabold text-brand-navy flex items-center gap-3 justify-center lg:justify-start">
+                    <span class="w-8 h-8 rounded-lg bg-brand-accent/10 text-brand-accent flex items-center justify-center"><i class="fa-solid fa-graduation-cap"></i></span>
+                    رحلة التعلم والاحتراف
+                </h2>
+                <p class="text-slate-500 text-sm md:text-base mt-2">اختر مستواك الحالي لاكتشاف محتوى مخصص ومكثف</p>
+            </div>
+
+            <!-- أزرار التبويب التفاعلية -->
+            <div class="flex border-b border-slate-200 gap-2 p-1 bg-slate-100 rounded-xl max-w-md mx-auto lg:mx-0 no-print">
+                <button onclick="switchTab('beginner')" id="tab-btn-beginner" class="flex-1 py-3 text-sm font-bold rounded-lg transition-all duration-300 bg-brand-navy text-white shadow-sm">
+                    <i class="fa-solid fa-seedling ml-2"></i>
+                    أساسيات المبتدئين
+                </button>
+                <button onclick="switchTab('advanced')" id="tab-btn-advanced" class="flex-1 py-3 text-sm font-bold rounded-lg transition-all duration-300 text-slate-500 hover:text-brand-navy">
+                    <i class="fa-solid fa-meteor ml-2"></i>
+                    نصائح وتقنيات المحترفين
+                </button>
+            </div>
+
+            <!-- تبويب المبتدئين -->
+            <div id="tab-content-beginner" class="space-y-8 animate-fadeIn transition-all duration-500">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- بطاقة 1: المتغيرات وأنواع البيانات -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover-card flex flex-col justify-between print-card relative overflow-hidden group">
+                        <div class="absolute -top-6 -left-6 w-16 h-16 bg-blue-50 group-hover:bg-blue-100/60 rounded-full transition-colors duration-300"></div>
+                        <div class="relative z-10 space-y-4">
+                            <span class="text-brand-accent text-xs font-bold uppercase tracking-wider">الأساس المتين</span>
+                            <h4 class="text-lg font-bold text-brand-navy flex items-center gap-2">
+                                <i class="fa-solid fa-font text-blue-500"></i>
+                                المتغيرات وأنواع البيانات
+                            </h4>
+                            <p class="text-slate-500 text-xs leading-relaxed">
+                                في بايثون، كتابة المتغيرات تكون مرنة للغاية بدون الحاجة لتعريف مسبق للنوع (Dynamic Typing). حيث تتعرف اللغة تلقائياً على القيم.
+                            </p>
+                            <!-- التفاصيل الإضافية عند الـ Hover -->
+                            <div class="bg-slate-50 p-3 rounded-lg text-[10px] font-mono text-slate-600 border border-slate-100 transition-all duration-300 group-hover:bg-amber-50 group-hover:border-amber-100">
+                                <span class="text-indigo-600 font-bold">مثال:</span>
+                                <pre class="mt-1">x = 10  # int
+y = "AI" # str
+is_easy = True # bool</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- بطاقة 2: هياكل البيانات الأساسية -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover-card flex flex-col justify-between print-card relative overflow-hidden group">
+                        <div class="absolute -top-6 -left-6 w-16 h-16 bg-teal-50 group-hover:bg-teal-100/60 rounded-full transition-colors duration-300"></div>
+                        <div class="relative z-10 space-y-4">
+                            <span class="text-brand-accent text-xs font-bold uppercase tracking-wider">تخزين البيانات</span>
+                            <h4 class="text-lg font-bold text-brand-navy flex items-center gap-2">
+                                <i class="fa-solid fa-layer-group text-teal-500"></i>
+                                القوائم والقاموس (Lists & Dicts)
+                            </h4>
+                            <p class="text-slate-500 text-xs leading-relaxed">
+                                تعتبر القوائم والقواميس العمود الفقري للتحكم بالبيانات وإدارتها قبل معالجتها وتحليلها في خوارزميات الذكاء الاصطناعي.
+                            </p>
+                            <!-- تفاصيل هادئة للمستخدم -->
+                            <div class="bg-slate-50 p-3 rounded-lg text-[10px] font-mono text-slate-600 border border-slate-100 transition-all duration-300 group-hover:bg-amber-50 group-hover:border-amber-100">
+                                <span class="text-indigo-600 font-bold">مثال:</span>
+                                <pre class="mt-1"># List & Dictionary
+users = ["Ahmed", "Ali"]
+data = {"age": 28, "job": "AI"}</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- بطاقة 3: مكتبة NumPy -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover-card flex flex-col justify-between print-card relative overflow-hidden group">
+                        <div class="absolute -top-6 -left-6 w-16 h-16 bg-amber-50 group-hover:bg-amber-100/60 rounded-full transition-colors duration-300"></div>
+                        <div class="relative z-10 space-y-4">
+                            <span class="text-brand-accent text-xs font-bold uppercase tracking-wider">سرعة فائقة</span>
+                            <h4 class="text-lg font-bold text-brand-navy flex items-center gap-2">
+                                <i class="fa-solid fa-cube text-brand-accent"></i>
+                                مكتبة NumPy الرياضية
+                            </h4>
+                            <p class="text-slate-500 text-xs leading-relaxed">
+                                المكتبة السحرية للتعامل مع المصفوفات الضخمة (Arrays) والعمليات الجبرية المعقدة بسرعة لا تقارن بالقوائم التقليدية.
+                            </p>
+                            <div class="bg-slate-50 p-3 rounded-lg text-[10px] font-mono text-slate-600 border border-slate-100 transition-all duration-300 group-hover:bg-amber-50 group-hover:border-amber-100">
+                                <span class="text-indigo-600 font-bold">مثال:</span>
+                                <pre class="mt-1">import numpy as np
+arr = np.array([1, 2, 3])
+print(arr * 2) # [2, 4, 6]</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- بطاقة 4: مكتبة Pandas -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover-card flex flex-col justify-between print-card relative overflow-hidden group">
+                        <div class="absolute -top-6 -left-6 w-16 h-16 bg-purple-50 group-hover:bg-purple-100/60 rounded-full transition-colors duration-300"></div>
+                        <div class="relative z-10 space-y-4">
+                            <span class="text-brand-accent text-xs font-bold uppercase tracking-wider">سيدة التحليل</span>
+                            <h4 class="text-lg font-bold text-brand-navy flex items-center gap-2">
+                                <i class="fa-solid fa-table text-purple-500"></i>
+                                مكتبة Pandas للبيانات
+                            </h4>
+                            <p class="text-slate-500 text-xs leading-relaxed">
+                                المكتبة الأشهر عالمياً لاستكشاف وهيكلة وتنظيف البيانات على شكل جداول واضحة وتفاعلية تُعرف بـ DataFrames.
+                            </p>
+                            <div class="bg-slate-50 p-3 rounded-lg text-[10px] font-mono text-slate-600 border border-slate-100 transition-all duration-300 group-hover:bg-amber-50 group-hover:border-amber-100">
+                                <span class="text-indigo-600 font-bold">مثال:</span>
+                                <pre class="mt-1">import pandas as pd
+df = pd.read_csv("data.csv")
+print(df.head()) # معاينة</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- تبويب المحترفين -->
+            <div id="tab-content-advanced" class="hidden space-y-8 animate-fadeIn transition-all duration-500">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- بطاقة 1: مولدات الذاكرة Generators -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover-card flex flex-col justify-between print-card relative overflow-hidden group">
+                        <div class="absolute -top-6 -left-6 w-16 h-16 bg-rose-50 group-hover:bg-rose-100/60 rounded-full transition-colors duration-300"></div>
+                        <div class="relative z-10 space-y-4">
+                            <span class="text-rose-500 text-xs font-bold uppercase tracking-wider">توفير الذاكرة الخارق</span>
+                            <h4 class="text-lg font-bold text-brand-navy flex items-center gap-2">
+                                <i class="fa-solid fa-gears text-rose-500"></i>
+                                الـ Generators و Yield
+                            </h4>
+                            <p class="text-slate-500 text-xs leading-relaxed">
+                                لتخطي مشاكل نفاذ الذاكرة (Memory Crash) عند معالجة ملفات بيانات ضخمة بالملايين، يفضل توليد القيم قيمة تلو الأخرى بدلاً من حفظها دفعة واحدة.
+                            </p>
+                            <div class="bg-slate-50 p-3 rounded-lg text-[10px] font-mono text-slate-600 border border-slate-100 transition-all duration-300 group-hover:bg-amber-50 group-hover:border-amber-100">
+                                <span class="text-rose-600 font-bold">السر المحترف:</span>
+                                <pre class="mt-1">def get_records():
+    for row in big_file:
+        yield row # لا يحجز ذاكرة!</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- بطاقة 2: اختصار القوائم List Comprehension -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover-card flex flex-col justify-between print-card relative overflow-hidden group">
+                        <div class="absolute -top-6 -left-6 w-16 h-16 bg-sky-50 group-hover:bg-sky-100/60 rounded-full transition-colors duration-300"></div>
+                        <div class="relative z-10 space-y-4">
+                            <span class="text-sky-500 text-xs font-bold uppercase tracking-wider">كود بايثوني أنيق</span>
+                            <h4 class="text-lg font-bold text-brand-navy flex items-center gap-2">
+                                <i class="fa-solid fa-wand-magic-sparkles text-sky-500"></i>
+                                الـ List Comprehension
+                            </h4>
+                            <p class="text-slate-500 text-xs leading-relaxed">
+                                اختزال الحلقات التكرارية والشروط المعقدة في سطر برمي واحد غاية في الأناقة والسرعة (Pythonic Code).
+                            </p>
+                            <div class="bg-slate-50 p-3 rounded-lg text-[10px] font-mono text-slate-600 border border-slate-100 transition-all duration-300 group-hover:bg-amber-50 group-hover:border-amber-100">
+                                <span class="text-sky-600 font-bold">السر المحترف:</span>
+                                <pre class="mt-1"># مربع الأعداد الزوجية بسطر واحد
+squares = [x**2 for x in data if x % 2 == 0]</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- بطاقة 3: الديكورات المتقدمة Decorators -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover-card flex flex-col justify-between print-card relative overflow-hidden group">
+                        <div class="absolute -top-6 -left-6 w-16 h-16 bg-amber-50 group-hover:bg-amber-100/60 rounded-full transition-colors duration-300"></div>
+                        <div class="relative z-10 space-y-4">
+                            <span class="text-brand-accent text-xs font-bold uppercase tracking-wider">التحكم في الدوال</span>
+                            <h4 class="text-lg font-bold text-brand-navy flex items-center gap-2">
+                                <i class="fa-solid fa-code text-brand-accent"></i>
+                                الـ Decorators (المغلفات)
+                            </h4>
+                            <p class="text-slate-500 text-xs leading-relaxed">
+                                إضافة ميزات برمجية جديدة ومحسنة كقياس وقت معالجة البيانات، دون المساس بالكود الداخلي للدالة وتغييره.
+                            </p>
+                            <div class="bg-slate-50 p-3 rounded-lg text-[10px] font-mono text-slate-600 border border-slate-100 transition-all duration-300 group-hover:bg-amber-50 group-hover:border-amber-100">
+                                <span class="text-brand-accent font-bold">السر المحترف:</span>
+                                <pre class="mt-1">@measure_time
+def train_model():
+    # كود تدريب خوارزمية الذكاء</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="best-practices" class="space-y-6 print-page-break">
+            <div class="text-center lg:text-right">
+                <h2 class="text-2xl md:text-3xl font-extrabold text-brand-navy flex items-center gap-3 justify-center lg:justify-start">
+                    <span class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-500 flex items-center justify-center"><i class="fa-solid fa-circle-check"></i></span>
+                    مقارنة عملية وكتابة الكود باحترافية
+                </h2>
+                <p class="text-slate-500 text-sm md:text-base mt-2">كيف تفرق بين الكود البدائي المشتت للذاكرة والكود المحترف المكتوب بالطريقة البايثونية السريعة؟</p>
+            </div>
+
+            <!-- المقارنة التفاعلية جنباً إلى جنب مع ميزة النسخ السريع -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- الكود البدائي / الخاطئ -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-red-100 relative print-card group">
+                    <span class="absolute top-4 left-4 bg-red-50 text-red-500 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                        <i class="fa-solid fa-circle-xmark"></i> كود بدائي وبطيء
+                    </span>
+                    <h3 class="text-lg font-bold text-red-600 mb-4 flex items-center gap-2">
+                        <i class="fa-regular fa-lightbulb"></i>
+                        طريقة معالجة البيانات بالحلقات التقليدية
+                    </h3>
+                    <p class="text-slate-500 text-xs mb-4 leading-relaxed">
+                        استخدام الحلقات التكرارية (for loop) للمرور على مجموعات هائلة من الأرقام في NumPy أو Pandas يقتل سرعة المعالجة تماماً ويصنف كأحد الأخطاء الكارثية.
+                    </p>
+                    
+                    <div class="relative bg-slate-900 rounded-2xl p-4 text-left font-mono text-xs text-slate-300 border border-slate-800">
+                        <div class="absolute top-2 right-2 flex items-center gap-2">
+                            <span class="text-[10px] text-slate-500">Python 3</span>
+                        </div>
+                        <pre id="code-wrong" class="overflow-x-auto pt-6 text-red-300">
+# الطريقة الخاطئة والبطيئة جداً
+output_list = []
+for item in dataset:
+    if item > 50:
+        output_list.append(item * 2)
+# هذه العملية تأخذ ثوانٍ ثمينة من وقت المعالجة!
+                        </pre>
+                    </div>
+                </div>
+
+                <!-- الكود الأنيق والاحترافي -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-emerald-100 relative print-card group">
+                    <span class="absolute top-4 left-4 bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                        <i class="fa-solid fa-circle-check"></i> الكود البايثوني الأسرع
+                    </span>
+                    <h3 class="text-lg font-bold text-emerald-600 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check"></i>
+                        المعالجة الموجهة (Vectorized Operation)
+                    </h3>
+                    <p class="text-slate-500 text-xs mb-4 leading-relaxed">
+                        الاعتماد على Vectorization في NumPy أو كتابة كود مدمج بسطر واحد يمرر العمليات الحسابية بشكل متوازي مما يسفر عن توفير هائل في الوقت.
+                    </p>
+                    
+                    <div class="relative bg-slate-900 rounded-2xl p-4 text-left font-mono text-xs text-slate-300 border border-slate-800">
+                        <div class="absolute top-2 right-2 flex items-center gap-2">
+                            <button onclick="copyToClipboard('code-right')" class="no-print bg-slate-800 hover:bg-brand-accent text-white hover:text-brand-navy p-1.5 px-3 rounded text-[10px] transition-colors duration-200">
+                                <i class="fa-regular fa-copy"></i> نسخ الكود
+                            </button>
+                        </div>
+                        <pre id="code-right" class="overflow-x-auto pt-6 text-emerald-300">
+# الطريقة الذكية والصحيحة (بايثون الاحترافية)
+import numpy as np
+
+# العمليات الحسابية الموجهة سريعة في لحظة واحدة!
+output_array = dataset[dataset > 50] * 2
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="common-errors" class="space-y-6 print-page-break">
+            <div class="text-center lg:text-right">
+                <h2 class="text-2xl md:text-3xl font-extrabold text-brand-navy flex items-center gap-3 justify-center lg:justify-start">
+                    <span class="w-8 h-8 rounded-lg bg-rose-50 text-rose-500 flex items-center justify-center"><i class="fa-solid fa-triangle-exclamation"></i></span>
+                    الأخطاء الكارثية الشائعة وحلولها البرمجية
+                </h2>
+                <p class="text-slate-500 text-sm md:text-base mt-2">أكورديون تفاعلي يعرض المشاكل الشائعة التي يقع فيها مبرمجو البيانات وطريقة تفاديها</p>
+            </div>
+
+            <!-- هيكل الأكورديون -->
+            <div class="max-w-4xl mx-auto space-y-4 no-print">
+                
+                <!-- أكورديون 1 -->
+                <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm transition-all duration-300">
+                    <button onclick="toggleAccordion(1)" class="w-full p-5 text-right flex items-center justify-between font-bold text-brand-navy bg-slate-50/50 hover:bg-slate-50 transition-colors duration-200">
+                        <span class="flex items-center gap-3">
+                            <span class="w-7 h-7 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-xs">1</span>
+                            تعديل القوائم الافتراضية كمعاملات للدوال (Mutable Default Arguments)
+                        </span>
+                        <i id="accordion-icon-1" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                    </button>
+                    <div id="accordion-content-1" class="max-h-0 overflow-hidden transition-all duration-500 bg-white">
+                        <div class="p-6 border-t border-slate-100 space-y-4 text-xs md:text-sm">
+                            <p class="text-slate-600 leading-relaxed">
+                                <strong>المشكلة:</strong> عند تمرير قائمة فارغة كقيمة افتراضية لمعامل دالة <code class="bg-slate-100 px-1 py-0.5 rounded font-mono text-red-500">def add_item(item, items_list=[])</code>، يتم إنشاء هذه القائمة مرة واحدة فقط وتظل مخزنة في الذاكرة لتراكم كل المدخلات القادمة في المرات القادمة بدلاً من إنشاء قائمة فارغة جديدة في كل استدعاء!
+                            </p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-red-50 p-4 rounded-xl border border-red-100">
+                                    <span class="font-bold text-red-600">❌ الخطأ:</span>
+                                    <pre class="font-mono text-xs mt-2 text-red-800">
+def append_to(element, target=[]):
+    target.append(element)
+    return target
+# سيتراكم بشكل خاطئ في الذاكرة!</pre>
+                                </div>
+                                <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100">
+                                    <span class="font-bold text-emerald-600">✅ الحل الصحيح:</span>
+                                    <pre class="font-mono text-xs mt-2 text-emerald-800">
+def append_to(element, target=None):
+    if target is None:
+        target = []
+    target.append(element)
+    return target</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- أكورديون 2 -->
+                <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm transition-all duration-300">
+                    <button onclick="toggleAccordion(2)" class="w-full p-5 text-right flex items-center justify-between font-bold text-brand-navy bg-slate-50/50 hover:bg-slate-50 transition-colors duration-200">
+                        <span class="flex items-center gap-3">
+                            <span class="w-7 h-7 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-xs">2</span>
+                            خطأ الإسناد المتسلسل في Pandas (Chained Assignment Warning)
+                        </span>
+                        <i id="accordion-icon-2" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                    </button>
+                    <div id="accordion-content-2" class="max-h-0 overflow-hidden transition-all duration-500 bg-white">
+                        <div class="p-6 border-t border-slate-100 space-y-4 text-xs md:text-sm">
+                            <p class="text-slate-600 leading-relaxed">
+                                <strong>المشكلة:</strong> تظهر الرسالة الشهيرة <code class="bg-slate-100 px-1 py-0.5 rounded font-mono text-red-500">SettingWithCopyWarning</code> عند محاولة تعديل قيمة في DataFrame تم استخلاصها كنسخة جزئية وليس كمرجع أساسي، مما يؤدي لعدم معرفة بايثون ما إذا كان التعديل يتم في نسخة وهمية أم في البيانات الأصلية.
+                            </p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-red-50 p-4 rounded-xl border border-red-100">
+                                    <span class="font-bold text-red-600">❌ الخطأ:</span>
+                                    <pre class="font-mono text-xs mt-2 text-red-800">
+df[df['age'] > 30]['status'] = 'Senior'
+# تسبب تحذيراً ولا تغير في الأصل غالباً</pre>
+                                </div>
+                                <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100">
+                                    <span class="font-bold text-emerald-600">✅ الحل الصحيح:</span>
+                                    <pre class="font-mono text-xs mt-2 text-emerald-800">
+# استخدام الدالة المخصصة .loc للوصول الآمن
+df.loc[df['age'] > 30, 'status'] = 'Senior'</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- أكورديون 3 -->
+                <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm transition-all duration-300">
+                    <button onclick="toggleAccordion(3)" class="w-full p-5 text-right flex items-center justify-between font-bold text-brand-navy bg-slate-50/50 hover:bg-slate-50 transition-colors duration-200">
+                        <span class="flex items-center gap-3">
+                            <span class="w-7 h-7 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-xs">3</span>
+                            مشكلة تسرب الذاكرة في الذكاء الاصطناعي (GPU/RAM Leak)
+                        </span>
+                        <i id="accordion-icon-3" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                    </button>
+                    <div id="accordion-content-3" class="max-h-0 overflow-hidden transition-all duration-500 bg-white">
+                        <div class="p-6 border-t border-slate-100 space-y-4 text-xs md:text-sm">
+                            <p class="text-slate-600 leading-relaxed">
+                                <strong>المشكلة:</strong> تجميع وتخزين خسارة التدريب (Loss Value) في PyTorch ككائن tensor متكامل داخل قائمة، مما يجعل بايثون تحتفظ بكامل شجرة العمليات الحسابية والرسومية في كارت الشاشة والذاكرة دون تصفيتها، مما يسبب تحطم البرنامج بعد تكرار الدورات (Epochs).
+                            </p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-red-50 p-4 rounded-xl border border-red-100">
+                                    <span class="font-bold text-red-600">❌ الخطأ:</span>
+                                    <pre class="font-mono text-xs mt-2 text-red-800">
+total_loss += loss # خطأ قاتل!
+# يحتفظ بكل المسار الحسابي للـ GPU</pre>
+                                </div>
+                                <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100">
+                                    <span class="font-bold text-emerald-600">✅ الحل الصحيح:</span>
+                                    <pre class="font-mono text-xs mt-2 text-emerald-800">
+# استخلاص القيمة الرقمية النظيفة فقط
+total_loss += loss.item()</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- نسخة مطبوعة مبسطة للأكورديونات تظهر تلقائياً عند الطباعة كـ PDF -->
+            <div class="hidden print:block space-y-6">
+                <div class="border-b pb-4">
+                    <h4 class="font-bold text-base text-brand-navy">1. تعديل القوائم الافتراضية كمعاملات للدوال</h4>
+                    <p class="text-slate-600 text-sm mt-1">تجنب تمرير قائمة فارغة كمعامل افتراضي في الدوال، واستخدم معامل None بدلاً منها لتفادي تراكم البيانات المخزنة عشوائياً في الذاكرة.</p>
+                </div>
+                <div class="border-b pb-4">
+                    <h4 class="font-bold text-base text-brand-navy">2. خطأ الإسناد المتسلسل في Pandas</h4>
+                    <p class="text-slate-600 text-sm mt-1">استخدم دائماً الدالة loc للوصول والتعديل الآمن في حقول البيانات وتجنب Chained Assignment لتفادي Warning الأداء الشهير.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-base text-brand-navy">3. مشكلة تسرب الذاكرة في الذكاء الاصطناعي</h4>
+                    <p class="text-slate-600 text-sm mt-1">عند جمع الـ loss في PyTorch، استخدم دالة item لاستخلاص القيمة وتجنب تخزين التينسور بالكامل لحماية كرت الشاشة والذاكرة من النفاذ.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="quiz" class="bg-slate-900 text-white p-8 rounded-3xl relative overflow-hidden shadow-xl no-print">
+            <div class="absolute -top-12 -left-12 w-48 h-48 bg-brand-accent/10 rounded-full blur-2xl"></div>
+            
+            <div class="relative z-10 max-w-3xl mx-auto space-y-6 text-center">
+                <span class="text-brand-accent text-xs font-bold uppercase tracking-wider">تحدي بايثون السريع</span>
+                <h3 class="text-2xl md:text-3xl font-bold">اختبر معلوماتك البرمجية الآن!</h3>
+                <p class="text-slate-300 text-xs md:text-sm">
+                    أي من الأكواد التالية يستهلك ذاكرة RAM أقل (أكثر كفاءة في استهلاك موارد الجهاز) لإنشاء مصفوفة أعداد ضخمة؟
+                </p>
+
+                <!-- خيارات الإجابة التفاعلية -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+                    <button onclick="checkAnswer(false)" class="p-4 rounded-2xl bg-slate-800 border border-slate-700 hover:border-red-500 hover:bg-slate-800/80 transition-all duration-300 text-right flex items-center justify-between group">
+                        <span class="text-xs md:text-sm font-mono">[x*2 for x in range(10000000)]</span>
+                        <span class="w-6 h-6 rounded-full bg-slate-700 group-hover:bg-red-500/10 flex items-center justify-center text-xs text-slate-300 group-hover:text-red-400">أ</span>
+                    </button>
+                    <button onclick="checkAnswer(true)" class="p-4 rounded-2xl bg-slate-800 border border-slate-700 hover:border-emerald-500 hover:bg-slate-800/80 transition-all duration-300 text-right flex items-center justify-between group">
+                        <span class="text-xs md:text-sm font-mono">(x*2 for x in range(10000000))</span>
+                        <span class="w-6 h-6 rounded-full bg-slate-700 group-hover:bg-emerald-500/10 flex items-center justify-center text-xs text-slate-300 group-hover:text-emerald-400">ب</span>
+                    </button>
+                </div>
+
+                <!-- رسالة النتيجة التفاعلية المدمجة -->
+                <div id="quiz-result" class="hidden p-4 rounded-xl text-xs md:text-sm font-bold transition-all duration-500"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-brand-navy text-white mt-12 py-12 px-4 sm:px-6 lg:px-8 border-t border-slate-800 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-5 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:24px_24px]"></div>
+        
+        <div class="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            <div class="lg:col-span-7 space-y-4 text-center lg:text-right">
+                <h3 class="text-xl md:text-2xl font-bold bg-gradient-to-l from-white to-slate-400 bg-clip-text text-transparent">جاهز لتنفيذ مشروعك القادم وتطبيق أقوى تقنيات بايثون؟</h3>
+                <p class="text-slate-400 text-xs md:text-sm max-w-xl leading-relaxed">
+                    هذا الدليل تم تصميمه وكتابته بعناية لنشر المعرفة البرمجية ودعم مجتمع مطوري بايثون والذكاء الاصطناعي في الوطن العربي، تحت إشراف وتصميم المهندس أحمد خالد.
+                </p>
+            </div>
+
+            <!-- وسائل التواصل وروابط المهندس أحمد خالد -->
+            <div class="lg:col-span-5 flex flex-col items-center lg:items-end gap-4">
+                <div class="flex gap-4">
+                    <!-- رابط لينكد إن الفعال -->
+                    <a href="https://www.linkedin.com/in/ahmed-khalid97/" target="_blank" class="w-12 h-12 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-white hover:text-brand-accent hover:border-brand-accent transition-all duration-300 no-print" title="LinkedIn">
+                        <i class="fa-brands fa-linkedin text-xl"></i>
+                    </a>
+                    <!-- تليجرام/ بريد إلكتروني افتراضي للمشاركة -->
+                    <a href="mailto:ahmed.khalid.data@gmail.com" class="w-12 h-12 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-white hover:text-brand-accent hover:border-brand-accent transition-all duration-300 no-print" title="البريد الإلكتروني">
+                        <i class="fa-solid fa-envelope text-xl"></i>
+                    </a>
+                </div>
+                
+                <div class="text-center lg:text-left text-xs text-slate-500">
+                    <p>© 2026 جميع الحقوق محفوظة لـ <span class="text-brand-accent font-bold">Ahmed Khaled</span></p>
+                    <p class="mt-1">صمم بكل شغف لمجتمعات البيانات العربية 🐍💻</p>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+    <script>
+        function switchTab(tabId) {
+            const btnBeginner = document.getElementById('tab-btn-beginner');
+            const btnAdvanced = document.getElementById('tab-btn-advanced');
+            const contentBeginner = document.getElementById('tab-content-beginner');
+            const contentAdvanced = document.getElementById('tab-content-advanced');
+
+            if (tabId === 'beginner') {
+                // تفعيل تبويب المبتدئين
+                btnBeginner.classList.add('bg-brand-navy', 'text-white', 'shadow-sm');
+                btnBeginner.classList.remove('text-slate-500', 'hover:text-brand-navy');
+                
+                btnAdvanced.classList.remove('bg-brand-navy', 'text-white', 'shadow-sm');
+                btnAdvanced.classList.add('text-slate-500', 'hover:text-brand-navy');
+
+                contentBeginner.classList.remove('hidden');
+                contentAdvanced.classList.add('hidden');
+            } else {
+                // تفعيل تبويب المحترفين
+                btnAdvanced.classList.add('bg-brand-navy', 'text-white', 'shadow-sm');
+                btnAdvanced.classList.remove('text-slate-500', 'hover:text-brand-navy');
+                
+                btnBeginner.classList.remove('bg-brand-navy', 'text-white', 'shadow-sm');
+                btnBeginner.classList.add('text-slate-500', 'hover:text-brand-navy');
+
+                contentAdvanced.classList.remove('hidden');
+                contentBeginner.classList.add('hidden');
+            }
+        }
+
+        function toggleAccordion(id) {
+            const content = document.getElementById(`accordion-content-${id}`);
+            const icon = document.getElementById(`accordion-icon-${id}`);
+
+            if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+                content.style.maxHeight = '0px';
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                // إغلاق كل الأكورديونات المفتوحة مسبقاً لمظهر مرتب ونظيف
+                for (let i = 1; i <= 3; i++) {
+                    document.getElementById(`accordion-content-${i}`).style.maxHeight = '0px';
+                    document.getElementById(`accordion-icon-${i}`).style.transform = 'rotate(0deg)';
+                }
+                // فتح الأكورديون المختار
+                content.style.maxHeight = content.scrollHeight + 'px';
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        function copyToClipboard(elementId) {
+            const codeText = document.getElementById(elementId).innerText;
+            
+            // إنشاء عنصر مؤقت لإجراء عملية النسخ بنجاح
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeText;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            
+            try {
+                document.execCommand('copy');
+                // إظهار تنبيه داخلي مخصص وبسيط بدلاً من الـ Alert المزعج
+                showFloatingNotification("تم نسخ الكود بنجاح! جاهز للتجربة والتشغيل 🎉", "success");
+            } catch (err) {
+                showFloatingNotification("عذراً، فشل نسخ الكود. يرجى التحديد والنسخ يدوياً.", "error");
+            }
+            
+            document.body.removeChild(tempTextArea);
+        }
+
+        /* دالة التنبيه العائم المخصص */
+        function showFloatingNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `fixed bottom-5 left-5 px-6 py-3 rounded-xl shadow-lg text-white font-bold text-xs md:text-sm transition-all duration-300 transform translate-y-10 opacity-0 z-50 ${
+                type === 'success' ? 'bg-emerald-600' : 'bg-red-600'
+            }`;
+            notification.innerText = message;
+            
+            document.body.appendChild(notification);
+            
+            // تحريك التنبيه للظهور
+            setTimeout(() => {
+                notification.classList.remove('translate-y-10', 'opacity-0');
+            }, 100);
+
+            // اختفاء التنبيه تلقائياً
+            setTimeout(() => {
+                notification.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        function checkAnswer(isCorrect) {
+            const resultBox = document.getElementById('quiz-result');
+            resultBox.classList.remove('hidden', 'bg-red-900/50', 'text-red-300', 'bg-emerald-950', 'text-emerald-300');
+            
+            if (isCorrect) {
+                resultBox.classList.add('bg-emerald-950', 'text-emerald-300');
+                resultBox.innerHTML = `
+                    <p class="flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-circle-check"></i>
+                        أحسنت! إجابة صحيحة تماماً. استخدام الأقواس الدائرية (Generators) لا يحجز أي مساحة تذكر في ذاكرة RAM مقارنة بالأقواس المربعة (List Comprehension) التي تقوم بحجز مساحة لجميع القيم دفعة واحدة.
+                    </p>
+                `;
+            } else {
+                resultBox.classList.add('bg-red-900/50', 'text-red-300');
+                resultBox.innerHTML = `
+                    <p class="flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                        للأسف الإجابة خاطئة! الخيار (أ) يعتمد على حجز مصفوفة متكاملة في ذاكرة RAM فوراً. تذكر أن الخيار (ب) يعتمد على الـ Generators التي تولد القيم عند الحاجة فقط دون استهلاك موارد الجهاز.
+                    </p>
+                `;
+            }
+        }
+
+        const canvas = document.getElementById('growthChart');
+        const ctx = canvas.getContext('2d');
+
+        function setupCanvas() {
+            // ضبط الحجم وتوافقية الريتنا والشاشات
+            const rect = canvas.parentNode.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        }
+
+        function drawChart() {
+            const width = canvas.width / window.devicePixelRatio;
+            const height = canvas.height / window.devicePixelRatio;
+            
+            // تنظيف الكانفاس أولاً
+            ctx.clearRect(0, 0, width, height);
+
+            // شبكة المخطط الخلفية (Grid lines)
+            ctx.strokeStyle = '#1e293b';
+            ctx.lineWidth = 1;
+            for (let i = 1; i < 5; i++) {
+                let y = (height / 5) * i;
+                ctx.beginPath();
+                ctx.moveTo(40, y);
+                ctx.lineTo(width - 20, y);
+                ctx.stroke();
+            }
+
+            // رسم خطوط الأداء والمحاور
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(40, 20);
+            ctx.lineTo(40, height - 30);
+            ctx.lineTo(width - 20, height - 30);
+            ctx.stroke();
+
+            // نقاط بايثون (نمو متسارع)
+            const pythonData = [
+                { year: '2016', val: 30 },
+                { year: '2018', val: 45 },
+                { year: '2020', val: 65 },
+                { year: '2022', val: 85 },
+                { year: '2024', val: 95 },
+                { year: '2026', val: 98 }
+            ];
+
+            const otherData = [
+                { year: '2016', val: 50 },
+                { year: '2018', val: 52 },
+                { year: '2020', val: 48 },
+                { year: '2022', val: 46 },
+                { year: '2024', val: 45 },
+                { year: '2026', val: 43 }
+            ];
+
+            const paddingLeft = 60;
+            const paddingRight = 40;
+            const chartWidth = width - paddingLeft - paddingRight;
+            const chartHeight = height - 80;
+
+            // دالة رسم المنحنى بشكل أنيق
+            function drawLineChart(data, color, isAccent) {
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 4;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+
+                data.forEach((point, idx) => {
+                    const x = paddingLeft + (chartWidth / (data.length - 1)) * idx;
+                    const y = height - 40 - (chartHeight * (point.val / 100));
+
+                    if (idx === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        // إضافة انحناءات سلسة
+                        const prevX = paddingLeft + (chartWidth / (data.length - 1)) * (idx - 1);
+                        const prevY = height - 40 - (chartHeight * (data[idx - 1].val / 100));
+                        ctx.bezierCurveTo((prevX + x) / 2, prevY, (prevX + x) / 2, y, x, y);
+                    }
+                });
+                ctx.stroke();
+
+                // تلوين المساحة تحت المنحنى بشكل تدريجي (Gradient path)
+                const gradient = ctx.createLinearGradient(0, 40, 0, height - 40);
+                if (isAccent) {
+                    gradient.addColorStop(0, 'rgba(249, 115, 22, 0.3)');
+                    gradient.addColorStop(1, 'rgba(249, 115, 22, 0)');
+                } else {
+                    gradient.addColorStop(0, 'rgba(99, 102, 241, 0.2)');
+                    gradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
+                }
+                
+                ctx.fillStyle = gradient;
+                ctx.lineTo(paddingLeft + chartWidth, height - 40);
+                ctx.lineTo(paddingLeft, height - 40);
+                ctx.fill();
+
+                // رسم نقاط دائرية تفاعلية على المنحنى
+                data.forEach((point, idx) => {
+                    const x = paddingLeft + (chartWidth / (data.length - 1)) * idx;
+                    const y = height - 40 - (chartHeight * (point.val / 100));
+
+                    ctx.fillStyle = color;
+                    ctx.beginPath();
+                    ctx.arc(x, y, 6, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.fillStyle = '#0f172a';
+                    ctx.beginPath();
+                    ctx.arc(x, y, 3, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // كتابة النصوص التوضيحية للأعوام أسفل المنحنى
+                    if (isAccent) {
+                        ctx.fillStyle = '#94a3b8';
+                        ctx.font = '10px Cairo';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(point.year, x, height - 15);
+                    }
+                });
+            }
+
+            // رسم اللغات الأخرى أولاً (الخلفية) ثم بايثون في الواجهة للتأكيد
+            drawLineChart(otherData, '#6366f1', false);
+            drawLineChart(pythonData, '#f97316', true);
+        }
+
+        // تشغيل الرسوم البيانية وإعدادها فور تحميل الصفحة بالكامل
+        window.onload = function() {
+            setupCanvas();
+            drawChart();
+        };
+
+        // تفاعل الرسوم مع إعادة التحجيم للشاشات المختلفة
+        window.onresize = function() {
+            setupCanvas();
+            drawChart();
+        };
+
+        // إمكانية إعادة تشغيل الأنيميشن عند نقر الكانفاس
+        canvas.addEventListener('click', () => {
+            setupCanvas();
+            drawChart();
+            showFloatingNotification("تمت إعادة تنشيط المخطط التفاعلي بنجاح 🚀", "success");
+        });
+    </script>
+</body>
+</html>
